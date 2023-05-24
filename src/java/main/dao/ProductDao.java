@@ -98,7 +98,7 @@ public class ProductDao {
                         float price = rs.getFloat("price");
                         float percentDiscount = rs.getFloat("percent_discount");
                         int quantity = rs.getInt("quantity");
-   
+
                         int fetchedCategoryId = rs.getInt("category_id");
                         float totalRating = rs.getFloat("total_rating");
                         Date createdAt = rs.getDate("created_at");
@@ -117,6 +117,39 @@ public class ProductDao {
         }
 
         return filteredList;
+    }
+
+    public static Product getProductById(int id) {
+        try ( Connection cn = DBUtil.makeConnection()) {
+            if (cn != null) {
+                String sqlQuery = "SELECT id, name, thumbnail_url, description, price, percent_discount, quantity,category_id, total_rating, created_at, deleted_at FROM products WHERE id = ?";
+                try ( PreparedStatement ps = cn.prepareStatement(sqlQuery)) {
+                    ps.setInt(1, id);
+                    try ( ResultSet rs = ps.executeQuery()) {
+                        if (rs.next()) {
+                            String name = rs.getString("name");
+                            String thumbnailUrl = rs.getString("thumbnail_url");
+                            String description = rs.getString("description");
+                            float price = rs.getFloat("price");
+                            float percentDiscount = rs.getFloat("percent_discount");
+                            int quantity = rs.getInt("quantity");
+                            int categoryId = rs.getInt("category_id");
+                            float totalRating = rs.getFloat("total_rating");
+                            Date createdAt = rs.getDate("created_at");
+                            Date deletedAt = rs.getDate("deleted_at");
+
+                            return new Product(id, name, thumbnailUrl, description, price, percentDiscount,
+                                    quantity, categoryId, totalRating, createdAt, deletedAt);
+
+                        }
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return null;
     }
 
     public static boolean addProduct(Product product) {

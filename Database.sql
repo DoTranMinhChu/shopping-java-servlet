@@ -1,3 +1,7 @@
+CREATE DATABASE [shopping-db];
+GO
+USE [shopping-db];
+GO
 CREATE TABLE users (
     id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     fullname NVARCHAR(255) NOT NULL,
@@ -204,3 +208,31 @@ VALUES
     (1, 'Great product!', 5, '2023-05-13T00:00:00+07:00', NULL),
     (2, 'Excellent service!', 4, '2023-05-13T00:00:00+07:00', NULL);
 GO
+
+
+CREATE TABLE posts (
+    id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+    thumbnail_url NVARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+	title NVARCHAR(255) NOT NULL,
+	sort_description NVARCHAR(500) NOT NULL,
+	content NVARCHAR(2000) NOT NULL,
+    created_at DATE NOT NULL,
+    deleted_at DATE,
+    CONSTRAINT FK_PostUser FOREIGN KEY (user_id)
+    REFERENCES users(id)
+);
+GO
+
+INSERT INTO users ( fullname, username, avatar, email, phone, password,user_role, address, created_at, deleted_at)
+VALUES
+    ('Marketing', 'marketing', 'assets/images/avatar1.jpg', 'marketing@example.com', '1234567891', 'password1','marketing', '1234 Main St', '2023-05-13T00:00:00+07:00', NULL)
+GO
+
+INSERT INTO posts (thumbnail_url, user_id, title, sort_description, content, created_at)
+VALUES 
+    ('https://images04.nicepage.com/feature/583347/blog-category.jpg', 3, 'Post 1', 'Short description of post 1', 'Content of post 1', '2023-05-01'),
+    ('https://images04.nicepage.com/feature/583347/blog-category.jpg', 3, 'Post 2', 'Short description of post 2', 'Content of post 2', '2023-05-02'),
+    ('https://images04.nicepage.com/feature/583347/blog-category.jpg', 3, 'Post 3', 'Short description of post 3', 'Content of post 3', '2023-05-03'),
+    ('https://images04.nicepage.com/feature/583347/blog-category.jpg', 3, 'Post 4', 'Short description of post 4', 'Content of post 4', '2023-05-04'),
+    ('https://images04.nicepage.com/feature/583347/blog-category.jpg', 3, 'Post 5', 'Short description of post 5', 'Content of post 5', '2023-05-05');

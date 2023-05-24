@@ -5,10 +5,6 @@
         <servlet-class>main.dao.controllers.ShoppingController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>MainController</servlet-name>
-        <servlet-class>main.dao.controllers.MainController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LoginController</servlet-name>
         <servlet-class>main.dao.controllers.LoginController</servlet-class>
     </servlet>
@@ -16,13 +12,13 @@
         <servlet-name>HomeController</servlet-name>
         <servlet-class>main.dao.controllers.HomeController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BlogController</servlet-name>
+        <servlet-class>main.dao.controllers.BlogController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ShoppingController</servlet-name>
         <url-pattern>/shopping</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>MainController</servlet-name>
-        <url-pattern>/MainController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -31,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>HomeController</servlet-name>
         <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BlogController</servlet-name>
+        <url-pattern>/blog</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -48,7 +48,6 @@ public class LoginController extends HttpServlet {
                     }
                 }
             }
-            System.out.println("token ====> " + token);
             if (!token.equals("")) {
                 User user = UserDao.userLoginWithTokenRememberMe(token);
                 System.out.println(user);
