@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,7 +58,7 @@ public class ShopDao {
                     ps.setString(1, shop.getName());
                     ps.setString(2, shop.getAddress());
                     ps.setString(3, shop.getUserId());
-                    ps.setDate(4, shop.getCreatedAt());
+                    ps.setDate(4, Date.valueOf(LocalDate.now()));
                     ps.setDate(5, shop.getDeletedAt());
                     rowsAffected = ps.executeUpdate();
                 }

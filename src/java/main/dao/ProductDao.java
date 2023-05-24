@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,8 +74,8 @@ public class ProductDao {
                     ps.setInt(7, product.getShopId());
                     ps.setInt(8, product.getCategoryId());
                     ps.setFloat(9, product.getTotalRating());
-                    ps.setDate(10, product.getCreatedAt());
-                    ps.setDate(11, product.getDeletedAt());
+                    ps.setDate(10, Date.valueOf(LocalDate.now()));
+                    ps.setDate(11, null);
                     rowsAffected = ps.executeUpdate();
                 }
                 cn.close();

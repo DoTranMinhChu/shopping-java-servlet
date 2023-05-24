@@ -12,7 +12,6 @@ import java.sql.Date;
  * @author ohmin
  */
 public class User {
-
     private int id;
     private String avatar;
     private String email;
