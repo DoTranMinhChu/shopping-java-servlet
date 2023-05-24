@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="main.dto.Product"%>
+
 <!DOCTYPE html>
 <html>
     <head>
