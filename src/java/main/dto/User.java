@@ -12,6 +12,7 @@ import java.sql.Date;
  * @author ohmin
  */
 public class User {
+
     private int id;
     private String avatar;
     private String email;
@@ -20,13 +21,14 @@ public class User {
     private String username;
     private String address;
     private String phone;
+    private String userRole;
     private Date createdAt;
     private Date deletedAt;
 
     public User() {
     }
 
-    public User(int id, String avatar, String email, String password, String fullname, String username, String address, String phone, Date createdAt, Date deletedAt) {
+    public User(int id, String avatar, String email, String password, String fullname, String username, String address, String phone, String userRole, Date createdAt, Date deletedAt) {
         this.id = id;
         this.avatar = avatar;
         this.email = email;
@@ -35,8 +37,17 @@ public class User {
         this.username = username;
         this.address = address;
         this.phone = phone;
+        this.userRole = userRole;
         this.createdAt = createdAt;
         this.deletedAt = deletedAt;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
     public int getId() {

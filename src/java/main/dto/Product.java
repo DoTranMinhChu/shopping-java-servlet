@@ -19,7 +19,6 @@ public class Product {
     private float price;
     private float percentDiscount;
     private int quantity;
-    private int shopId;
     private int categoryId;
     private float totalRating;
     private Date createdAt;
@@ -28,7 +27,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int id, String name, String thumbnailUrl, String description, float price, float percentDiscount, int quantity, int shopId, int categoryId, float totalRating, Date createdAt, Date deletedAt) {
+    public Product(int id, String name, String thumbnailUrl, String description, float price, float percentDiscount, int quantity, int categoryId, float totalRating, Date createdAt, Date deletedAt) {
         this.id = id;
         this.name = name;
         this.thumbnailUrl = thumbnailUrl;
@@ -36,7 +35,6 @@ public class Product {
         this.price = price;
         this.percentDiscount = percentDiscount;
         this.quantity = quantity;
-        this.shopId = shopId;
         this.categoryId = categoryId;
         this.totalRating = totalRating;
         this.createdAt = createdAt;
@@ -97,14 +95,6 @@ public class Product {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public int getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(int shopId) {
-        this.shopId = shopId;
     }
 
     public int getCategoryId() {

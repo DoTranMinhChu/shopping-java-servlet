@@ -22,7 +22,7 @@ public class UserDao {
         try ( Connection cn = DBUtil.makeConnection()) {
 
             if (cn != null) {
-                String sqlQuery = "SELECT id, email,avatar,password,fullname,username,phone,address,created_at,deleted_at \n"
+                String sqlQuery = "SELECT id, email,avatar,password,fullname,username,phone,user_role,address,created_at,deleted_at \n"
                         + "FROM users \n"
                         + "WHERE status=1 AND email = ? COLLATE Latin1_General_CS_AS";
                 PreparedStatement pst = cn.prepareStatement(sqlQuery);
@@ -40,9 +40,10 @@ public class UserDao {
                     String phone = rs.getString("phone");
                     String username = rs.getString("username");
                     String address = rs.getString("address");
+                    String userRole = rs.getString("user_role");
                     Date createdAt = rs.getDate("created_at");
                     Date deletedAt = rs.getDate("deleted_at");
-                    user = new User(id, avatar, email, password, fullname, username, address, phone, createdAt, deletedAt);
+                    user = new User(id, avatar, email, password, fullname, username, address, phone, userRole, createdAt, deletedAt);
                 }
             }
             cn.close();
@@ -51,14 +52,14 @@ public class UserDao {
         }
         return user;
     }
-    
+
     public static User getInfoUserByUsername(String usernameCheck) {
         User user = null;
 
         try ( Connection cn = DBUtil.makeConnection()) {
 
             if (cn != null) {
-                String sqlQuery = "SELECT id, email,avatar,password,fullname,username,phone,address,created_at,deleted_at \n"
+                String sqlQuery = "SELECT id, email,avatar,password,fullname,username,phone,user_role,address,created_at,deleted_at \n"
                         + "FROM users \n"
                         + "WHERE username = ?";
                 PreparedStatement pst = cn.prepareStatement(sqlQuery);
@@ -76,9 +77,10 @@ public class UserDao {
                     String phone = rs.getString("phone");
                     String username = rs.getString("username");
                     String address = rs.getString("address");
+                    String userRole = rs.getString("user_role");
                     Date createdAt = rs.getDate("created_at");
                     Date deletedAt = rs.getDate("deleted_at");
-                    user = new User(id, avatar, email, password, fullname, username, address, phone, createdAt, deletedAt);
+                    user = new User(id, avatar, email, password, fullname, username, address, phone, userRole, createdAt, deletedAt);
                 }
             }
             cn.close();
@@ -92,7 +94,7 @@ public class UserDao {
         User user = null;
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
-                String sqlQuery = "SELECT id, avatar, email, password, fullname, username, address, phone, created_at, deleted_at \n"
+                String sqlQuery = "SELECT id, avatar, email, password, fullname, username, address, phone,user_role, created_at, deleted_at \n"
                         + "FROM users \n"
                         + "WHERE username=? AND password=? \n";
                 PreparedStatement pst = cn.prepareStatement(sqlQuery);
@@ -111,9 +113,10 @@ public class UserDao {
                     String phone = rs.getString("phone");
                     String username = rs.getString("username");
                     String address = rs.getString("address");
+                    String userRole = rs.getString("user_role");
                     Date createdAt = rs.getDate("created_at");
                     Date deletedAt = rs.getDate("deleted_at");
-                    user = new User(id, avatar, email, password, fullname, username, address, phone, createdAt, deletedAt);
+                    user = new User(id, avatar, email, password, fullname, username, address, phone, userRole, createdAt, deletedAt);
 
                 }
             }
@@ -128,7 +131,7 @@ public class UserDao {
         User user = null;
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
-                String sqlQuery = "SELECT users.id AS id, avatar, email, password, fullname, username, address, phone,users.created_at AS created_at,users.deleted_at AS deleted_at \n"
+                String sqlQuery = "SELECT users.id AS id, avatar, email, password, fullname, username, address, phone,user_role,users.created_at AS created_at,users.deleted_at AS deleted_at \n"
                         + "FROM user_tokens \n"
                         + "LEFT JOIN users ON user_tokens.user_id = users.id\n"
                         + "WHERE token = ?";
@@ -147,9 +150,10 @@ public class UserDao {
                     String phone = rs.getString("phone");
                     String username = rs.getString("username");
                     String address = rs.getString("address");
+                    String userRole = rs.getString("user_role");
                     Date createdAt = rs.getDate("created_at");
                     Date deletedAt = rs.getDate("deleted_at");
-                    user = new User(id, avatar, email, password, fullname, username, address, phone, createdAt, deletedAt);
+                    user = new User(id, avatar, email, password, fullname, username, address, phone, userRole, createdAt, deletedAt);
 
                 }
             }
@@ -165,7 +169,7 @@ public class UserDao {
 
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
-                String sqlQuery = "SELECT id, avatar, email, password, fullname, username, address, phone, created_at, deleted_at \n"
+                String sqlQuery = "SELECT id, avatar, email, password, fullname, username, address, phone,user_role, created_at, deleted_at \n"
                         + "FROM users \n";
                 try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery)) {
 
@@ -178,10 +182,11 @@ public class UserDao {
                         String username = rs.getString("username");
                         String address = rs.getString("address");
                         String phone = rs.getString("phone");
+                        String userRole = rs.getString("user_role");
                         Date createdAt = rs.getDate("created_at");
                         Date deletedAt = rs.getDate("deleted_at");
 
-                        User user = new User(id, avatar, email, password, fullname, username, address, phone, createdAt, deletedAt);
+                        User user = new User(id, avatar, email, password, fullname, username, address, phone, userRole, createdAt, deletedAt);
                         userList.add(user);
                     }
 
@@ -199,8 +204,8 @@ public class UserDao {
     public static boolean addUser(User user) {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
-                String sqlQuery = "INSERT INTO users (avatar, email, password, fullname, username, address, phone, created_at) "
-                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                String sqlQuery = "INSERT INTO users (avatar, email, password, fullname, username, address, phone,user_role, created_at) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 int rowsAffected;
                 try ( PreparedStatement ps = cn.prepareStatement(sqlQuery)) {
                     ps.setString(1, user.getAvatar());
@@ -210,7 +215,8 @@ public class UserDao {
                     ps.setString(5, user.getUsername());
                     ps.setString(6, user.getAddress());
                     ps.setString(7, user.getPhone());
-                    ps.setDate(8, Date.valueOf(LocalDate.now()));
+                    ps.setString(8, user.getUserRole());
+                    ps.setDate(9, Date.valueOf(LocalDate.now()));
                     rowsAffected = ps.executeUpdate();
                 }
                 cn.close();
@@ -228,7 +234,7 @@ public class UserDao {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 String sqlQuery = "UPDATE users SET avatar=?, email=?, password=?, fullname=?, username=?, "
-                        + "address=?, phone=?, created_at=?, deleted_at=? WHERE id=?";
+                        + "address=?, phone=?,user_role=? , created_at=?, deleted_at=? WHERE id=?";
                 int rowsAffected;
                 try ( PreparedStatement ps = cn.prepareStatement(sqlQuery)) {
                     ps.setString(1, user.getAvatar());
@@ -238,9 +244,10 @@ public class UserDao {
                     ps.setString(5, user.getUsername());
                     ps.setString(6, user.getAddress());
                     ps.setString(7, user.getPhone());
-                    ps.setDate(8, user.getCreatedAt());
-                    ps.setDate(9, user.getDeletedAt());
-                    ps.setInt(10, user.getId());
+                    ps.setString(8, user.getPhone());
+                    ps.setDate(9, user.getCreatedAt());
+                    ps.setDate(10, user.getDeletedAt());
+                    ps.setInt(11, user.getId());
                     rowsAffected = ps.executeUpdate();
                 }
                 cn.close();

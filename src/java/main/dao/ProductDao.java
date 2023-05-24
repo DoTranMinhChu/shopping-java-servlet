@@ -25,7 +25,7 @@ public class ProductDao {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 String sqlQuery = "SELECT id, name, thumbnail_url, description, price, percent_discount, quantity, "
-                        + "shop_id, category_id, total_rating, created_at, deleted_at FROM products";
+                        + "category_id, total_rating, created_at, deleted_at FROM products";
                 try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery)) {
 
                     while (rs.next()) {
@@ -36,14 +36,13 @@ public class ProductDao {
                         float price = rs.getFloat("price");
                         float percentDiscount = rs.getFloat("percent_discount");
                         int quantity = rs.getInt("quantity");
-                        int shopId = rs.getInt("shop_id");
                         int categoryId = rs.getInt("category_id");
                         float totalRating = rs.getFloat("total_rating");
                         Date createdAt = rs.getDate("created_at");
                         Date deletedAt = rs.getDate("deleted_at");
 
                         Product product = new Product(id, name, thumbnailUrl, description, price, percentDiscount,
-                                quantity, shopId, categoryId, totalRating, createdAt, deletedAt);
+                                quantity, categoryId, totalRating, createdAt, deletedAt);
                         productList.add(product);
                     }
 
@@ -64,7 +63,7 @@ public class ProductDao {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 StringBuilder sqlQuery = new StringBuilder("SELECT DISTINCT p.id, p.name, p.thumbnail_url, p.description, p.price, p.percent_discount, p.quantity, ")
-                        .append("p.shop_id, p.category_id, p.total_rating, p.created_at, p.deleted_at FROM products p ");
+                        .append(" p.category_id, p.total_rating, p.created_at, p.deleted_at FROM products p ");
 
                 if (colorId != null) {
                     sqlQuery.append("JOIN product_color pc ON p.id = pc.product_id ");
@@ -99,14 +98,14 @@ public class ProductDao {
                         float price = rs.getFloat("price");
                         float percentDiscount = rs.getFloat("percent_discount");
                         int quantity = rs.getInt("quantity");
-                        int shopId = rs.getInt("shop_id");
+   
                         int fetchedCategoryId = rs.getInt("category_id");
                         float totalRating = rs.getFloat("total_rating");
                         Date createdAt = rs.getDate("created_at");
                         Date deletedAt = rs.getDate("deleted_at");
 
                         Product product = new Product(id, name, thumbnailUrl, description, price, percentDiscount,
-                                quantity, shopId, fetchedCategoryId, totalRating, createdAt, deletedAt);
+                                quantity, fetchedCategoryId, totalRating, createdAt, deletedAt);
                         filteredList.add(product);
                     }
                 }
@@ -124,7 +123,7 @@ public class ProductDao {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 String sqlQuery = "INSERT INTO products (name, thumbnail_url, description, price, percent_discount, "
-                        + "quantity, shop_id, category_id, total_rating, created_at, deleted_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        + "quantity, category_id, total_rating, created_at, deleted_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 int rowsAffected;
                 try ( PreparedStatement ps = cn.prepareStatement(sqlQuery)) {
                     ps.setString(1, product.getName());
@@ -133,11 +132,10 @@ public class ProductDao {
                     ps.setFloat(4, product.getPrice());
                     ps.setFloat(5, product.getPercentDiscount());
                     ps.setInt(6, product.getQuantity());
-                    ps.setInt(7, product.getShopId());
-                    ps.setInt(8, product.getCategoryId());
-                    ps.setFloat(9, product.getTotalRating());
-                    ps.setDate(10, Date.valueOf(LocalDate.now()));
-                    ps.setDate(11, null);
+                    ps.setInt(7, product.getCategoryId());
+                    ps.setFloat(8, product.getTotalRating());
+                    ps.setDate(9, Date.valueOf(LocalDate.now()));
+                    ps.setDate(10, null);
                     rowsAffected = ps.executeUpdate();
                 }
                 cn.close();
@@ -155,7 +153,7 @@ public class ProductDao {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 String sqlQuery = "UPDATE products SET name=?, thumbnail_url=?, description=?, price=?, "
-                        + "percent_discount=?, quantity=?, shop_id=?, category_id=?, total_rating=?, created_at=?, deleted_at=? "
+                        + "percent_discount=?, quantity=?, category_id=?, total_rating=?, created_at=?, deleted_at=? "
                         + "WHERE id=?";
                 int rowsAffected;
                 try ( PreparedStatement ps = cn.prepareStatement(sqlQuery)) {
@@ -165,12 +163,11 @@ public class ProductDao {
                     ps.setFloat(4, product.getPrice());
                     ps.setFloat(5, product.getPercentDiscount());
                     ps.setInt(6, product.getQuantity());
-                    ps.setInt(7, product.getShopId());
-                    ps.setInt(8, product.getCategoryId());
-                    ps.setFloat(9, product.getTotalRating());
-                    ps.setDate(10, product.getCreatedAt());
-                    ps.setDate(11, product.getDeletedAt());
-                    ps.setInt(12, product.getId());
+                    ps.setInt(7, product.getCategoryId());
+                    ps.setFloat(8, product.getTotalRating());
+                    ps.setDate(9, product.getCreatedAt());
+                    ps.setDate(10, product.getDeletedAt());
+                    ps.setInt(11, product.getId());
                     rowsAffected = ps.executeUpdate();
                 }
                 cn.close();
