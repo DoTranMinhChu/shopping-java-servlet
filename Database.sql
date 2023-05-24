@@ -160,6 +160,22 @@ CREATE TABLE feedback (
 );
 GO
 
+CREATE TABLE members (
+    id INT NOT NULL AUTO_INCREMENT,
+    fullname NVARCHAR(255) NOT NULL,
+    username VARCHAR(100),
+    avatar VARCHAR(255),
+    email VARCHAR(100),
+    phone VARCHAR(11),
+    password VARCHAR(100),
+    address NVARCHAR(500),
+	member_role varchar(20) NOT NULL CHECK (member_role IN('admin', 'seller', 'marketing')),
+    created_at DATE NOT NULL,
+    deleted_at DATE,
+    PRIMARY KEY (id)
+);
+GO
+
 -- Generate mock data for the users table
 INSERT INTO users ( fullname, username, avatar, email, phone, password, address, created_at, deleted_at)
 VALUES
