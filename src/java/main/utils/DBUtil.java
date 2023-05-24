@@ -14,7 +14,7 @@ public class DBUtil {
         Connection connection = null;
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://MINHCHU:1433;databaseName=shopping-db";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=shopping-db";
             String username = "sa";
             String password = "123456";
             connection = DriverManager.getConnection(url, username, password);
