@@ -12,9 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import main.dao.ProductDao;
-import main.dao.UserDao;
 import main.dto.Product;
-import main.dto.User;
 
 /**
  *
@@ -23,8 +21,7 @@ import main.dto.User;
 public class ShoppingController extends HttpServlet {
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -33,13 +30,28 @@ public class ShoppingController extends HttpServlet {
      */
     private static final String SUCCESS_JSP = "shopping.jsp";
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    protected void processRequestDoGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
         String url = SUCCESS_JSP;
         try {
-            ArrayList<Product> listProducts = ProductDao.getAllProducts();
+
+            String parProductName = request.getParameter("productName");
+            String parMinPricePrice = request.getParameter("minPrice");
+            String parMaxPricePrice = request.getParameter("maxPrice");
+            String parCategoryId = request.getParameter("categoryId");
+            String parColorId = request.getParameter("colorId");
+            String parRating = request.getParameter("rating");
+
+            String productName = (parProductName != null && !parProductName.isEmpty()) ? parProductName : null;
+            Float minPrice = (parMinPricePrice != null && !parMinPricePrice.isEmpty()) ? Float.parseFloat(parMinPricePrice) : null;
+            Float maxPrice = (parMaxPricePrice != null && !parMaxPricePrice.isEmpty()) ? Float.parseFloat(parMaxPricePrice) : null;
+            Integer categoryId = (parCategoryId != null && !parCategoryId.isEmpty()) ? Integer.parseInt(parCategoryId) : null;
+            Integer colorId = (parColorId != null && !parColorId.isEmpty()) ? Integer.parseInt(parColorId) : null;
+            Float rating = (parRating != null && !parRating.isEmpty()) ? Float.parseFloat(parRating) : null;
+
+            ArrayList<Product> listProducts = ProductDao.filterProducts(productName, minPrice, maxPrice, categoryId, colorId, rating);
             request.setAttribute("listProducts", listProducts);
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,13 +64,13 @@ public class ShoppingController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        processRequestDoGet(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      //  processRequest(request, response);
+        //  processRequest(request, response);
     }
 
     @Override

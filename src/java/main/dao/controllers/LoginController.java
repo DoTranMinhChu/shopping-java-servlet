@@ -62,8 +62,7 @@ public class LoginController extends HttpServlet {
                 error = "";
             }
             request.setAttribute(ATTRIBUTE_ERROR, error);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
         } finally {
             switch (type) {
                 case FORWARD:
@@ -78,7 +77,6 @@ public class LoginController extends HttpServlet {
             }
 
         }
-
     }
 
     /**
@@ -118,7 +116,6 @@ public class LoginController extends HttpServlet {
                 request.setAttribute(ATTRIBUTE_ERROR, ERROR_USERNAME_PASSWORD_INCORRECT);
                 this.processRequestDoGet(request, response);
             } else {
-
                 HttpSession session = request.getSession(true);
                 session.setAttribute(SESSION_ACCOUNT_INFOMATION, user);
                 response.sendRedirect(HOME_PAGE);

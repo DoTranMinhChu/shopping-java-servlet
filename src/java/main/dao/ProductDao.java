@@ -58,6 +58,68 @@ public class ProductDao {
         return productList;
     }
 
+    public static ArrayList<Product> filterProducts(String productName, Float minPrice, Float maxPrice, Integer categoryId, Integer colorId, Float rating) {
+        ArrayList<Product> filteredList = new ArrayList<>();
+
+        try ( Connection cn = DBUtil.makeConnection()) {
+            if (cn != null) {
+                StringBuilder sqlQuery = new StringBuilder("SELECT DISTINCT p.id, p.name, p.thumbnail_url, p.description, p.price, p.percent_discount, p.quantity, ")
+                        .append("p.shop_id, p.category_id, p.total_rating, p.created_at, p.deleted_at FROM products p ");
+
+                if (colorId != null) {
+                    sqlQuery.append("JOIN product_color pc ON p.id = pc.product_id ");
+                }
+                sqlQuery.append("WHERE 1=1");
+                // Add filters based on input parameters
+                if (productName != null && !productName.isEmpty()) {
+                    sqlQuery.append(" AND p.name LIKE '%").append(productName).append("%'");
+                }
+                if (minPrice != null) {
+                    sqlQuery.append(" AND p.price >= ").append(minPrice);
+                }
+                if (maxPrice != null) {
+                    sqlQuery.append(" AND p.price <= ").append(maxPrice);
+                }
+                if (categoryId != null) {
+                    sqlQuery.append(" AND p.category_id = ").append(categoryId);
+                }
+                if (colorId != null) {
+                    sqlQuery.append(" AND pc.color_id = ").append(colorId);
+                }
+                if (rating != null) {
+                    sqlQuery.append(" AND pc.total_rating = ").append(rating);
+                }
+                try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery.toString())) {
+                    while (rs.next()) {
+                        // Retrieve product details from result set and create Product objects
+                        int id = rs.getInt("id");
+                        String name = rs.getString("name");
+                        String thumbnailUrl = rs.getString("thumbnail_url");
+                        String description = rs.getString("description");
+                        float price = rs.getFloat("price");
+                        float percentDiscount = rs.getFloat("percent_discount");
+                        int quantity = rs.getInt("quantity");
+                        int shopId = rs.getInt("shop_id");
+                        int fetchedCategoryId = rs.getInt("category_id");
+                        float totalRating = rs.getFloat("total_rating");
+                        Date createdAt = rs.getDate("created_at");
+                        Date deletedAt = rs.getDate("deleted_at");
+
+                        Product product = new Product(id, name, thumbnailUrl, description, price, percentDiscount,
+                                quantity, shopId, fetchedCategoryId, totalRating, createdAt, deletedAt);
+                        filteredList.add(product);
+                    }
+                }
+            }
+
+            cn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return filteredList;
+    }
+
     public static boolean addProduct(Product product) {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
