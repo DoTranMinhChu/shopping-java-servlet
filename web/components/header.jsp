@@ -36,9 +36,20 @@
             </div>
         </div>
         <div>
-            <span>
-                icon
-            </span>
+            <%
+                if(account != null){
+            %>
+            <h2>Hello <b><%=account.getFullname()%></b></h2>
+            <%
+            }else{
+            %>
+            <a href="/login">
+                Login
+            </a>
+            <%
+          }
+            %>
+
 
         </div>
     </div>
