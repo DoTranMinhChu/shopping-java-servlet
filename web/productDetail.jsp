@@ -33,7 +33,7 @@
                 <div class="w-full p-6 flex flex-col justify-between">
 
                     <h1 class=" text-2xl font-bold mb-2 text-red-500"><%=productName %></h1>
-                    <h3 class="text-gray-700 mb-1">$<%= productPrice %></h3>
+                    <h3 class="text-gray-700 mb-1">$<%= productPrice %> | <%=- productPercentDiscount * 100%>%</h3>
                     <div>
                         <h2>Mô tả</h2>
                         <p class="text-gray-500 mb-4"><%= productDescription %></p>
