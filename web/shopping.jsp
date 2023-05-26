@@ -2,6 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="main.dto.Product"%>
+<%@page import="main.dto.Color"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -113,9 +114,17 @@
                         <div class="mb-4">
                             <label class="block mb-2" for="colorId">Color:</label>
                             <select id="colorId" name="colorId" class="border border-gray-300 rounded-md py-2 px-4 w-full">
-                                <option value="">All</option>
-                                <option value="1" <%= (parColorId!=null && Integer.parseInt(parColorId)==1) ? "selected" : ""%>>Color 1</option>
-                                <option value="2" <%=  (parColorId!=null && Integer.parseInt(parColorId)==2) ? "selected" : ""%>>Color 2</option>
+                                <option value="">--</option>
+                                <%
+                               ArrayList<Color> colors = (ArrayList<Color>) request.getAttribute("colors");
+                             
+                                for (Color color : colors) {
+                                %>
+                                <option value=<%=color.getId()%> <%= (parColorId!=null && Integer.parseInt(parColorId)==color.getId()) ? "selected" : ""%>><%=color.getName()%></option>
+
+                                <%
+                                    }
+                                %>
                                 <!-- Add more color options as needed -->
                             </select>
                         </div>
@@ -145,6 +154,18 @@
                         </a>
                         <%
                         }
+                        %>
+
+
+                    </div>
+                    <div class="flex"> 
+                        <%
+                            int totalPage = (int) request.getAttribute("totalPage");
+                            for (int i = 1; i <= totalPage; i++) {
+                        %>
+                        <button class="bg-red-200 p-2 m-2"><%=i%></button>
+                        <%
+                            }
                         %>
                     </div>
                 </div>

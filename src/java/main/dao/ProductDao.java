@@ -60,9 +60,9 @@ public class ProductDao {
         return productList;
     }
 
-    public static ArrayList<Product> filterProducts(String productName, Float minPrice, Float maxPrice, Integer categoryId, Integer colorId, Float rating) {
+    public static ArrayList<Product> filterProducts(String productName, Float minPrice, Float maxPrice, Integer categoryId, Integer colorId, Float rating, int page, int size) {
         ArrayList<Product> filteredList = new ArrayList<>();
-
+        int offset = size * (page - 1);
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
                 StringBuilder sqlQuery = new StringBuilder("SELECT DISTINCT p.id, p.name, p.thumbnail_url, p.description, p.price, p.percent_discount, p.quantity, ")
@@ -91,6 +91,7 @@ public class ProductDao {
                 if (rating != null) {
                     sqlQuery.append(" AND pc.total_rating = ").append(rating);
                 }
+                sqlQuery.append("ORDER BY id OFFSET ").append(offset).append(" ROWS \nFETCH NEXT ").append(size).append(" ROWS ONLY");
                 try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery.toString())) {
                     while (rs.next()) {
                         // Retrieve product details from result set and create Product objects
@@ -120,6 +121,53 @@ public class ProductDao {
         }
 
         return filteredList;
+    }
+
+    public static int countFilterProducts(String productName, Float minPrice, Float maxPrice, Integer categoryId, Integer colorId, Float rating) {
+
+        try ( Connection cn = DBUtil.makeConnection()) {
+            if (cn != null) {
+                StringBuilder sqlQuery = new StringBuilder("SELECT DISTINCT p.id FROM products p ");
+
+                if (colorId != null) {
+                    sqlQuery.append("JOIN product_color pc ON p.id = pc.product_id ");
+                }
+                sqlQuery.append("WHERE 1=1");
+                // Add filters based on input parameters
+                if (productName != null && !productName.isEmpty()) {
+                    sqlQuery.append(" AND p.name LIKE '%").append(productName).append("%'");
+                }
+                if (minPrice != null) {
+                    sqlQuery.append(" AND p.price >= ").append(minPrice);
+                }
+                if (maxPrice != null) {
+                    sqlQuery.append(" AND p.price <= ").append(maxPrice);
+                }
+                if (categoryId != null) {
+                    sqlQuery.append(" AND p.category_id = ").append(categoryId);
+                }
+                if (colorId != null) {
+                    sqlQuery.append(" AND pc.color_id = ").append(colorId);
+                }
+                if (rating != null) {
+                    sqlQuery.append(" AND pc.total_rating = ").append(rating);
+                }
+                String query = "SELECT COUNT(*) as count FROM (" + sqlQuery.toString() + ") AS subquery;";
+                try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(query)) {
+                    while (rs.next()) {
+                        int count = rs.getInt("count");
+                        return count;
+                    }
+
+                }
+            }
+
+            cn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
     }
 
     public static Product getProductById(int id) {
