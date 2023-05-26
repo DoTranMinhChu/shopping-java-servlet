@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import main.dao.UserDao;
 import main.dto.User;
 
-public class LoginController extends HttpServlet {
+public class LogoutController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> methods.
@@ -37,45 +37,7 @@ public class LoginController extends HttpServlet {
     protected void processRequestDoGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String type = FORWARD;
-        try {
-            String token = "";
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("token")) {
-                        token = cookie.getValue();
-                    }
-                }
-            }
-            if (!token.equals("")) {
-                User user = UserDao.userLoginWithTokenRememberMe(token);
-                System.out.println(user);
-                HttpSession session = request.getSession(true);
-                session.setAttribute(SESSION_ACCOUNT_INFOMATION, user);
-                type = SEND_REDIRECT;
 
-            }
-            String error = (String) request.getAttribute(ATTRIBUTE_ERROR);
-            if (error == null) {
-                error = "";
-            }
-            request.setAttribute(ATTRIBUTE_ERROR, error);
-        } catch (SQLException e) {
-        } finally {
-            switch (type) {
-                case FORWARD:
-                    RequestDispatcher dispatcher = request.getRequestDispatcher(LOGIN_PAGE_JSP);
-                    dispatcher.forward(request, response);
-                    break;
-                case SEND_REDIRECT:
-                    response.sendRedirect(SEND_REDIRECT);
-                    break;
-                default:
-                    throw new AssertionError();
-            }
-
-        }
     }
 
     /**
@@ -95,29 +57,11 @@ public class LoginController extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("remember-me");
+        request.setAttribute(ATTRIBUTE_ERROR, null);
+        HttpSession session = request.getSession(true);
+        session.setAttribute(SESSION_ACCOUNT_INFOMATION, null);
+        response.sendRedirect(HOME_PAGE);
 
-        try {
-            if (rememberMe != null) {
-                String token = String.format("%x", (int) (Math.random() * 20000000)) + username.hashCode();
-                UserDao.createTokenByUsername(token, username);
-                Cookie cookie = new Cookie("token", token);
-                cookie.setMaxAge(60 * 10);
-                response.addCookie(cookie);
-            }
-            user = UserDao.userLoginByUsernameAndPassowrd(username, password);
-
-        } catch (SQLException e) {
-            response.sendRedirect("invalid.html");
-        } finally {
-            if (user == null) {
-                request.setAttribute(ATTRIBUTE_ERROR, ERROR_USERNAME_PASSWORD_INCORRECT);
-                this.processRequestDoGet(request, response);
-            } else {
-                HttpSession session = request.getSession(true);
-                session.setAttribute(SESSION_ACCOUNT_INFOMATION, user);
-                response.sendRedirect(HOME_PAGE);
-            }
-        }
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

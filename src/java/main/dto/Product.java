@@ -5,6 +5,7 @@
 package main.dto;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,6 +24,8 @@ public class Product {
     private float totalRating;
     private Date createdAt;
     private Date deletedAt;
+    private ArrayList<Color> colors;
+    private ArrayList<Size> sizes;
 
     public Product() {
     }
@@ -129,4 +132,23 @@ public class Product {
         this.deletedAt = deletedAt;
     }
 
+    public ArrayList<Color> getColors() {
+        return colors;
+    }
+
+    public void setColors(ArrayList<Color> colors) {
+        this.colors = colors;
+    }
+
+    public ArrayList<Size> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(ArrayList<Size> sizes) {
+        this.sizes = sizes;
+    }
+
+
+
+    
 }

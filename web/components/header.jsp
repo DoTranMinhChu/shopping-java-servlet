@@ -11,7 +11,7 @@
     </div>
     <div class="flex flex-1 justify-between mx-8">
         <div>
-            <a class="font-extrabold text-2xl" href="HomeController">Mon'sa</a>
+            <a class="font-extrabold text-2xl" href="/">Mon'sa</a>
         </div>
         <div class="flex flex-1 justify-center font-bold text-lg">
             <div class="mx-2">
@@ -39,12 +39,22 @@
             <%
                 if(account != null){
             %>
-            <h2>Hello <b><%=account.getFullname()%></b></h2>
+            <h2 class="inline-block">Hello <b><%=account.getFullname()%></b></h2>
+            |
+            <form class="inline-block" action="logout" method="POST">
+                <button type="submit">
+                    Logout
+                </button>
+            </form>
             <%
             }else{
             %>
             <a href="/login">
                 Login
+            </a>
+            |
+            <a href="/register">
+                Register
             </a>
             <%
           }

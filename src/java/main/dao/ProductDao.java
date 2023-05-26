@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.dto.Color;
+import main.dto.Size;
 
 public class ProductDao {
 
@@ -139,8 +141,13 @@ public class ProductDao {
                             Date createdAt = rs.getDate("created_at");
                             Date deletedAt = rs.getDate("deleted_at");
 
-                            return new Product(id, name, thumbnailUrl, description, price, percentDiscount,
+                            Product product = new Product(id, name, thumbnailUrl, description, price, percentDiscount,
                                     quantity, categoryId, totalRating, createdAt, deletedAt);
+                            ArrayList<Color> colors = ProductColorDao.getAllProductColorByProductId(id);
+                            product.setColors(colors);
+                            ArrayList<Size> sizes = ProductSizeDao.getAllProductSizeByProductId(id);
+                            product.setSizes(sizes);
+                            return product;
 
                         }
                     }

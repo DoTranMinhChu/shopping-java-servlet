@@ -1,5 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="main.dto.Product"%>
+<%@page import="main.dto.Color"%>
+<%@page import="main.dto.Size"%>
+<%@page import="java.util.ArrayList"%>
+
 <%
        Product product = (Product) request.getAttribute("product");
        String productThumbnailUrl =  product.getThumbnailUrl();
@@ -7,6 +11,8 @@
        float productPrice =  product.getPrice();
        String productDescription =  product.getDescription();
        float productPercentDiscount =  product.getPercentDiscount();
+       ArrayList<Color> colors = product.getColors();
+       ArrayList<Size> sizes = product.getSizes();
 %>
 <!DOCTYPE html>
 <html>
@@ -34,19 +40,33 @@
                     </div>
                     <div>
                         <h2>Màu</h2>
-                        <button class="py-2 px-6 rounded-3xl mr-4" style="background-color: yellow;color: black">Yellow</button>
-                        <button class="py-2 px-6 rounded-3xl mr-4" style="background-color: black;color: white">Black</button>
+                        <%
+                            for (Color color : colors) {
+                        %>
+                        <button class="py-2 px-6 rounded-3xl mr-4" style="background-color:  <%= color.getBgrHex() %>;color:  <%= color.getTextHex() %>"><%= color.getName() %></button>
+                        <%
+                            }
+                        %>
+
+
+
                     </div>
                     <div>
                         <h2>Size</h2>
-                        <button class="py-2 px-6 rounded-3xl mr-4 border-black border-2" >XL</button>
-                        <button class="py-2 px-6 rounded-3xl mr-4 border-black border-2" >XXL</button>
+                        <%
+                     for (Size size : sizes) {
+                        %>
+                          <button class="py-2 px-6 rounded-3xl mr-4 border-black border-2" ><%= size.getName() %></button>
+                        <%
+                            }
+                        %>
                     </div>
 
                 </div>
 
             </div>
             <div class="mt-6">
+
                 <button class="py-2 px-6 rounded-3xl mr-4"style="background-color: black;color: white" >Add to card</button>
                 <button class="py-2 px-6 rounded-3xl mr-4"style="background-color: orange;color: white" >Buy now</button>
             </div>
