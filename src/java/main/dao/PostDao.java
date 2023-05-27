@@ -52,6 +52,26 @@ public class PostDao {
         return postList;
     }
 
+    public static int countAllPosts() {
+     
+        try ( Connection cn = DBUtil.makeConnection()) {
+            if (cn != null) {
+                String sqlQuery = "SELECT COUNT(*) AS count\n"
+                        + "FROM posts";
+
+                try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery)) {
+                    while (rs.next()) {
+                        return rs.getInt("count");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
+    }
+
     public static Post getPostById(int id) {
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {

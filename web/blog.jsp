@@ -11,6 +11,7 @@
         <meta charset="UTF-8">
         <title>Blog</title>
         <link rel="stylesheet" href="styles/tailwindcss/tailwind-all.min.css">
+        <script src="script/index.js"></script>
     </head>
     <body>
         <jsp:include page="components/header.jsp" />
@@ -49,7 +50,19 @@
                     </div>
                 </div>
                 <% } %>
+                <div class="flex"> 
+                    <%
+                        int totalPage = (int) request.getAttribute("totalPage");
+                        for (int i = 1; i <= totalPage; i++) {
+                    %>
+                    <button onclick="appendParameter('page',<%=i%>)" class="bg-red-200 p-2 m-2"><%=i%></button>
+
+                    <%
+                        }
+                    %>
+                </div>
             </div>
+
         </div>
 
 
