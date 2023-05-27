@@ -22,13 +22,14 @@ import main.utils.DBUtil;
  */
 public class PostDao {
 
-    public static ArrayList<Post> getAllPosts() {
+    public static ArrayList<Post> getAllPosts(int page, int size) {
         ArrayList<Post> postList = new ArrayList<>();
-
+        int offset = size * (page - 1);
         try ( Connection cn = DBUtil.makeConnection()) {
             if (cn != null) {
-                String sqlQuery = "SELECT id, thumbnail_url, user_id, title, sort_description, content, created_at, deleted_at FROM posts ORDER BY created_at DESC";
-                try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery)) {
+                StringBuilder sqlQuery = new StringBuilder("SELECT id, thumbnail_url, user_id, title, sort_description, content, created_at, deleted_at FROM posts ORDER BY created_at DESC");
+                sqlQuery.append(" OFFSET ").append(offset).append(" ROWS \nFETCH NEXT ").append(size).append(" ROWS ONLY");
+                try ( Statement st = cn.createStatement();  ResultSet rs = st.executeQuery(sqlQuery.toString())) {
                     while (rs.next()) {
                         int id = rs.getInt("id");
                         String thumbnailUrl = rs.getString("thumbnail_url");

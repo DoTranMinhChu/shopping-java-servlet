@@ -44,7 +44,13 @@ public class BlogController extends HttpServlet {
                 url = BLOG_DETAIL_JSP;
                 request.setAttribute("post", post);
             } else {
-                ArrayList<Post> listPosts = PostDao.getAllPosts();
+                String parPage = request.getParameter("page");
+                if (parPage == null || parPage.isEmpty()) {
+                    parPage = "1";
+                }
+                int page = Integer.parseInt(parPage);
+                int size = 3;
+                ArrayList<Post> listPosts = PostDao.getAllPosts(page, size);
                 request.setAttribute("listPosts", listPosts);
             }
 
